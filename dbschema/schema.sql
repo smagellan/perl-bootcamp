@@ -22,14 +22,17 @@ CREATE TABLE profession (
     id INTEGER PRIMARY KEY, 
     nomer INTEGER NOT NULL,
     name TEXT NOT NULL, 
-    sub_fac_id INTEGER NOT NULL, 
-    UNIQUE (nomer, name, sub_fac_id) ON CONFLICT REPLACE
+    sub_fac_id INTEGER NOT NULL,
+    UNIQUE (nomer, name, sub_fac_id) ON CONFLICT REPLACE,
+    FOREIGN KEY (sub_fac_id) REFERENCES sub_faculty (id) ON DELETE CASCADE
 );
 
 CREATE TABLE group_st (
     id INTEGER PRIMARY KEY, 
     nomer INTEGER NOT NULL, 
-    sub_fac_id INTEGER NOT NULL
+    sub_fac_id INTEGER NOT NULL,
+    UNIQUE (nomer),
+    FOREIGN KEY (sub_fac_id) REFERENCES sub_faculty (id) ON DELETE CASCADE
 );
 
 CREATE TABLE student (
@@ -37,11 +40,12 @@ CREATE TABLE student (
     surname TEXT NOT NULL, 
     name TEXT not null, 
     sex TEXT NOT NULL CHECK( sex in ('M', 'F')),
-    birthday INTEGER NOT NULL,
+    birthday TEXT NOT NULL,
     nationality TEXT NOT NULL,
     address TEXT NOT NULL,
     mark REAL NOT NULL,
-    group_id INTEGER NOT NULL
+    group_id INTEGER NOT NULL,
+    FOREIGN KEY (group_id) REFERENCES group_st (id) ON DELETE CASCADE
 );
 
 CREATE TABLE relative (
@@ -50,29 +54,33 @@ CREATE TABLE relative (
     name TEXT NOT NULL,
     rodstvo TEXT NOT NULL,
     address TEXT NOT NULL,
-    work_place TEXT NOT NULL,
-    job TEXT NOT NULL,
-    stud_id INTEGER NOT NULL
+    work_place TEXT,
+    job TEXT,
+    stud_id INTEGER NOT NULL,
+    FOREIGN KEY (stud_id) REFERENCES student (id) ON DELETE CASCADE
 );
 
 CREATE TABLE abroad (
     id INTEGER PRIMARY KEY,
-    data INTEGER NOT NULL,
+    data TEXT NOT NULL,
     country TEXT NOT NULL,
-    rel_id INTEGER NOT NULL
+    rel_id INTEGER NOT NULL,
+    FOREIGN KEY (rel_id) REFERENCES relative (id) ON DELETE CASCADE
 );
 
 CREATE TABLE lecturer (
     id INTEGER PRIMARY KEY,
     surname TEXT NOT NULL,
     name TEXT NOT NULL, 
-    sub_fac_id INTEGER NOT NULL
+    sub_fac_id INTEGER NOT NULL,
+    FOREIGN KEY (sub_fac_id) REFERENCES sub_faculty (id) ON DELETE CASCADE
 );
 
 CREATE TABLE enterprise (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
-    address TEXT NOT NULL
+    address TEXT NOT NULL,
+    UNIQUE (name, address)
 );
 
 CREATE TABLE representative (
@@ -86,25 +94,31 @@ CREATE TABLE representative (
 
 CREATE TABLE var_assignment (
     id INTEGER PRIMARY KEY,
-    data_talk INTEGER NOT NULL,
+    data_talk TEXT NOT NULL,
     stud_id INTEGER NOT NULL,
     repres_id INTEGER NOT NULL,
     lect_id INTEGER NOT NULL,
-    ent_id INTEGER NOT NULL
+    ent_id INTEGER NOT NULL,
+    FOREIGN KEY (stud_id)   REFERENCES student (id) ON DELETE CASCADE,
+    FOREIGN KEY (repres_id) REFERENCES representative (id) ON DELETE CASCADE,
+    FOREIGN KEY (lect_id)   REFERENCES lecturer (id) ON DELETE CASCADE,
+    FOREIGN KEY (ent_id)    REFERENCES enterprise (id) ON DELETE CASCADE
 );
 
 CREATE TABLE assignment (
     id INTEGER PRIMARY KEY,
-    data_contr INTEGER NOT NULL,
+    data_contr TEXT NOT NULL,
     data_work INTEGER NOT NULL,
-    var_assig_id INTEGER NOT NULL
+    var_assig_id INTEGER NOT NULL,
+    FOREIGN KEY (var_assig_id) REFERENCES var_assignment (id) ON DELETE CASCADE
 );
 
 CREATE TABLE payment (
     id INTEGER PRIMARY KEY,
-    data INTEGER NOT NULL,
+    data TEXT NOT NULL,
     summa INTEGER NOT NULL,
-    assig_id INTEGER NOT NULL
+    assig_id INTEGER NOT NULL,
+    FOREIGN KEY (assig_id) REFERENCES assignment (id) ON DELETE CASCADE
 );
 
 
@@ -185,36 +199,36 @@ INSERT INTO representative(id, surname, name, job, ent_id) VALUES
 
 INSERT INTO student(id, surname, name, sex, birthday, nationality, address, mark, group_id) VALUES
 (100,	'Петров',	'Алексей',	'M',	'1984-03-12',	'Русский',	'ул.Хлобыстова, д.9, кв.43',	4.5,	100),
-(101,	'Пупкин',	'Андрей',	'Male',	'1984-01-14',	'Русский',	'ул.Горького, д.1, кв.4',	4.9,	100),
-(102,	'Сидоров',	'Илья',	'Male',	'1984-01-01',	'Русский',	'ул.Косякова, д.2, кв.1',	3.01,	100),
-(103,	'Алиев',	'Александр',	'Male',	'1984-12-10',	'Грузин',	'ул.Дачная, д.13, кв.12',	3.5,	101),
-(104,	'Иванов',	'Иван',	'Male',	'1983-11-03',	'Русский',	'ул.Гоголя, д.15, кв.110',	3.89,	101),
-(105,	'Левин',	'Дмитрий',	'Male',	'1984-07-28',	'Русский',	'ул.Зеленая, д.11, кв.11',	3.67,	101),
-(106,	'Огнев',	'Евгений',	'Male',	'1984-03-31',	'Русский',	'ул.Калинина, д.16, кв.1',	3.34,	102),
-(107,	'Павлова',	'Анна',	'Female',	'1983-06-25',	'Русская',	'ул.Казинская, д.4, кв.23',	4.8,	102),
-(108,	'Глотова',	'Ольга',	'Female',	'1984-04-17',	'Русская',	'ул.Икшинская, д.10, кв.3',	3.31,	102),
-(109,	'Соснова',	'Мария',	'Female',	'1984-12-13',	'Русская',	'Юрловский пр, д.1А, кв.15',	3.92,	103),
-(110,	'Шарафутдинов',	'Сергей',	'Male',	'1984-02-02',	'Русский',	'ул.Ягодная, д.12, кв.99',	4.47,	103),
-(111,	'Копылов',	'Сергей',	'Male',	'1984-08-07',	'Русский',	'ул.Грина, д.8, кв.45',	4.51,	103),
-(112,	'Баженова',	'Анна',	'Female',	'1984-10-04',	'Русская',	'ул.Элеваторная, д.17, кв.5',	3.15,	104),
-(113,	'Козлов',	'Игорь',	'Male',	'1984-10-11',	'Поляк',	'Луков пер., д.8, кв.75',	4.06,	104),
-(114,	'Кудашев',	'Алексей',	'Male',	'1984-02-13',	'Русский',	'ул.Дальняя, д.3, кв.45',	4.78,	104),
-(115,	'Казарина',	'Анна',	'Female',	'1984-01-31',	'Русская',	'ул.Довженко, д.32, кв.4',	3.25,	105),
-(116,	'Сечин',	'Алексей',	'Male',	'1983-12-31',	'Русский',	'ул.Забелина, д.14, кв.42',	5,	105),
-(117,	'Лактанова',	'Ольга',	'Female',	'1985-02-01',	'Русская',	'ул.Зональная, д.22, кв.15',	4.82,	106),
-(118,	'Обищан',	'Ксения',	'Female',	'1984-07-09',	'Русская',	'ул.Раевского, д.1, кв.78',	3.45,	106),
-(119,	'Болдырев',	'Александр',	'Male',	'1982-06-13',	'Русский',	'ул.Ротерта, д.2, кв.65',	3.19,	107),
-(120,	'Чижов',	'Максим',	'Male',	'1984-07-24',	'Русский',	'Рыбный пер., д.2, кв.16',	4.48,	107),
-(121,	'Чигарева',	'Ирина',	'Female',	'1984-08-12',	'Русская',	'ул.Жигулевская, д.24, кв.10',	4.54,	108),
-(122,	'Воронцова',	'Екатерина',	'Female',	'1983-08-22',	'Русская',	'ул.Обручева, д.11, кв.85',	4.96,	108),
-(123,	'Измайлов',	'Владимир',	'Male',	'1984-12-16',	'Русский',	'Ореховый пр., д.15, кв.34',	3.4,	109),
-(124,	'Хорин',	'Олег',	'Male',	'1984-04-29',	'Русский',	'ул.Отрадная, д.21, кв.2',	3.8,	109),
-(125,	'Бабайлова',	'Нина',	'Female',	'1984-04-10',	'Русская',	'ул.Федорова, д.19, кв.64',	4.33,	109),
-(126,	'Харитонов',	'Павел',	'Male',	'1983-05-04',	'Русский',	'ул.Фонвизина, д.18, кв.14',	4.44,	109),
-(127,	'Воробьев',	'Дмитрий',	'Male',	'1984-01-02',	'Русский',	'Тарный пр., д.2, кв.278',	3.66,	110),
-(128,	'Лимонов',	'Леонид',	'Male',	'1985-08-11',	'Русский',	'ул.Толбухина,д.5,кв.33',	3.9,	110),
-(129,	'Печкина',	'Оксана',	'Female',	'1984-09-09',	'Русская',	'ул.Тушинская,д.6,кв.49',	4.02,	111),
-(130,	'Яшин',	'Сергей',	'Male',	'1984-09-19',	'Русский',	'ул.Бажова,д.7,кв.75',	4.59,	111);
+(101,	'Пупкин',	'Андрей',	'M',	'1984-01-14',	'Русский',	'ул.Горького, д.1, кв.4',	4.9,	100),
+(102,	'Сидоров',	'Илья',	'M',	'1984-01-01',	'Русский',	'ул.Косякова, д.2, кв.1',	3.01,	100),
+(103,	'Алиев',	'Александр',	'M',	'1984-12-10',	'Грузин',	'ул.Дачная, д.13, кв.12',	3.5,	101),
+(104,	'Иванов',	'Иван',	'M',	'1983-11-03',	'Русский',	'ул.Гоголя, д.15, кв.110',	3.89,	101),
+(105,	'Левин',	'Дмитрий',	'M',	'1984-07-28',	'Русский',	'ул.Зеленая, д.11, кв.11',	3.67,	101),
+(106,	'Огнев',	'Евгений',	'M',	'1984-03-31',	'Русский',	'ул.Калинина, д.16, кв.1',	3.34,	102),
+(107,	'Павлова',	'Анна',	'F',	'1983-06-25',	'Русская',	'ул.Казинская, д.4, кв.23',	4.8,	102),
+(108,	'Глотова',	'Ольга',	'F',	'1984-04-17',	'Русская',	'ул.Икшинская, д.10, кв.3',	3.31,	102),
+(109,	'Соснова',	'Мария',	'F',	'1984-12-13',	'Русская',	'Юрловский пр, д.1А, кв.15',	3.92,	103),
+(110,	'Шарафутдинов',	'Сергей',	'M',	'1984-02-02',	'Русский',	'ул.Ягодная, д.12, кв.99',	4.47,	103),
+(111,	'Копылов',	'Сергей',	'M',	'1984-08-07',	'Русский',	'ул.Грина, д.8, кв.45',	4.51,	103),
+(112,	'Баженова',	'Анна',	'F',	'1984-10-04',	'Русская',	'ул.Элеваторная, д.17, кв.5',	3.15,	104),
+(113,	'Козлов',	'Игорь',	'M',	'1984-10-11',	'Поляк',	'Луков пер., д.8, кв.75',	4.06,	104),
+(114,	'Кудашев',	'Алексей',	'M',	'1984-02-13',	'Русский',	'ул.Дальняя, д.3, кв.45',	4.78,	104),
+(115,	'Казарина',	'Анна',	'F',	'1984-01-31',	'Русская',	'ул.Довженко, д.32, кв.4',	3.25,	105),
+(116,	'Сечин',	'Алексей',	'M',	'1983-12-31',	'Русский',	'ул.Забелина, д.14, кв.42',	5,	105),
+(117,	'Лактанова',	'Ольга',	'F',	'1985-02-01',	'Русская',	'ул.Зональная, д.22, кв.15',	4.82,	106),
+(118,	'Обищан',	'Ксения',	'F',	'1984-07-09',	'Русская',	'ул.Раевского, д.1, кв.78',	3.45,	106),
+(119,	'Болдырев',	'Александр',	'M',	'1982-06-13',	'Русский',	'ул.Ротерта, д.2, кв.65',	3.19,	107),
+(120,	'Чижов',	'Максим',	'M',	'1984-07-24',	'Русский',	'Рыбный пер., д.2, кв.16',	4.48,	107),
+(121,	'Чигарева',	'Ирина',	'F',	'1984-08-12',	'Русская',	'ул.Жигулевская, д.24, кв.10',	4.54,	108),
+(122,	'Воронцова',	'Екатерина',	'F',	'1983-08-22',	'Русская',	'ул.Обручева, д.11, кв.85',	4.96,	108),
+(123,	'Измайлов',	'Владимир',	'M',	'1984-12-16',	'Русский',	'Ореховый пр., д.15, кв.34',	3.4,	109),
+(124,	'Хорин',	'Олег',	'M',	'1984-04-29',	'Русский',	'ул.Отрадная, д.21, кв.2',	3.8,	109),
+(125,	'Бабайлова',	'Нина',	'F',	'1984-04-10',	'Русская',	'ул.Федорова, д.19, кв.64',	4.33,	109),
+(126,	'Харитонов',	'Павел',	'M',	'1983-05-04',	'Русский',	'ул.Фонвизина, д.18, кв.14',	4.44,	109),
+(127,	'Воробьев',	'Дмитрий',	'M',	'1984-01-02',	'Русский',	'Тарный пр., д.2, кв.278',	3.66,	110),
+(128,	'Лимонов',	'Леонид',	'M',	'1985-08-11',	'Русский',	'ул.Толбухина,д.5,кв.33',	3.9,	110),
+(129,	'Печкина',	'Оксана',	'F',	'1984-09-09',	'Русская',	'ул.Тушинская,д.6,кв.49',	4.02,	111),
+(130,	'Яшин',	'Сергей',	'M',	'1984-09-19',	'Русский',	'ул.Бажова,д.7,кв.75',	4.59,	111);
 
 
 
