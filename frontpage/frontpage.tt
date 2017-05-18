@@ -1,0 +1,12 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Students list</title>
+</head>
+<body>
+    students list:<br>
+    [% FOREACH row IN students_list %]
+       id: [% row.id  %]; name: [% row.name %]<br>
+    [% END %]
+</body>
+</html>
