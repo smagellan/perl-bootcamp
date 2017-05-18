@@ -7,7 +7,6 @@ use File::ShareDir;
 use Template;
 use Template::Constants qw( :debug );
 use BootcampDbConn;
-use DDP;
 use lib::abs;
 
 use base 'Exporter';

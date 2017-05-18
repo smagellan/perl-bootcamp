@@ -8,6 +8,7 @@ use Data::Printer;
 use FindBin;
 use lib $FindBin::Bin;
 
+use B qw(svref_2object);
 use BootcampSettings;
 use BootcampDbConn;
 use frontpage::Frontpage;
@@ -53,6 +54,11 @@ print "Please contact me at: <URL:", $d->url, ">\n";
 while (my $c = $d->accept() ) {
     if (my $r = $c->get_request() ) {
         my $handler = find_request_handler($c, $r);
+
+        my $cv = svref_2object ( $handler );
+        my $gv = $cv->GV;
+        print "handler: " . $gv->NAME . "\n";
+
         $handler->($c, $r);
 
         $c->close();
