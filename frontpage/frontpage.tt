@@ -1,12 +1,44 @@
+<!DOCTYPE html>
+
 <html>
 <head>
     <meta charset="utf-8" />
     <title>Students list</title>
+    [% INCLUDE styles %]
 </head>
+
 <body>
-    students list:<br>
-    [% FOREACH row IN students_list %]
-       id: [% row.id  %]; name: [% row.name %]<br>
+    [% IF students_list && students_list.size %]
+        students list:<br>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Birthday</th>
+                    <th>Group</th>
+                    <th>Avg. mark</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                [% FOREACH row IN students_list %]
+                    <tr>
+                        <td>[% row.name %]</td>
+                        <td>[% row.surname %]</td>
+                        <td>[% row.birthday %]</td>
+                        <td>[% row.nomer %]</td>
+                        <td>[% row.mark %]</td>
+                        <td>
+                            <a href="edit/[%  row.id %]">edit</a>
+                            <a href="delete/[%  row.id %]">delete</a>
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+    [% ELSE %]
+        No students yet
     [% END %]
 </body>
 </html>

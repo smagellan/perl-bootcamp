@@ -11,18 +11,24 @@ use lib $FindBin::Bin;
 use BootcampSettings;
 use BootcampDbConn;
 use frontpage::Frontpage;
+use edit::Edit;
 
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 
 sub find_request_handler {
     my ($c, $r) = @_;
     
     my $request_handler;
-    if ($r->method eq 'GET' and $r->uri->path eq "/") {
+    my $r_path = $r->uri->path;
+    if ($r->method eq 'GET' and $r_path eq "/") {
         $request_handler = \&students_list;
     } else {
-        $request_handler = \&permission_denied_handler;
+        if ($r_path =~ /^\/edit/) {
+            $request_handler = \&edit_student;
+        } else {
+            $request_handler = \&permission_denied_handler;
+        }
     }
     return $request_handler;
 }

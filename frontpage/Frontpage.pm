@@ -1,7 +1,7 @@
 package frontpage::Frontpage;
 
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 
 use File::ShareDir;
 use Template;
@@ -18,7 +18,8 @@ our @EXPORT = qw(
 sub students_list {
     my ($c, $r) = @_;
     my $dbh = db_conn();
-    my $sth = $dbh->prepare( "select * from student order by id desc;" );
+    my $sth = $dbh->prepare("select st.id, st.name, st.surname, st.birthday, gr.nomer, st.mark
+                                    from student st inner join group_st gr on (st.group_id = gr.id)" );
 
     my $rv = $sth->execute() or die $DBI::errstr;
     if($rv < 0){
@@ -29,7 +30,9 @@ sub students_list {
     my @keys = sort { $a cmp $b } keys %$students_hash;
     my @vals = @$students_hash{@keys};
 
+    my $my_path = lib::abs::path(".");
     my $tt_config = {
+        INCLUDE_PATH => $my_path
     };
     my $vars = {
         students_list => \@vals
@@ -37,7 +40,7 @@ sub students_list {
     my $template = Template->new($tt_config, $vars);
 
     my $processed_template;
-    $template->process("frontpage/frontpage.tt", $vars, \$processed_template) || die $template->error(), "\n";;
+    $template->process("frontpage.tt", $vars, \$processed_template) || die $template->error(), "\n";;
 
     $c->send_basic_header(200);
     print $c "Content-Type: text/html";

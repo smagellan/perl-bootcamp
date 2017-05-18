@@ -29,7 +29,7 @@ CREATE TABLE profession (
 
 CREATE TABLE group_st (
     id INTEGER PRIMARY KEY, 
-    nomer INTEGER NOT NULL, 
+    nomer TEXT NOT NULL, 
     sub_fac_id INTEGER NOT NULL,
     UNIQUE (nomer),
     FOREIGN KEY (sub_fac_id) REFERENCES sub_faculty (id) ON DELETE CASCADE
