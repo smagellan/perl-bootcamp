@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
     <meta charset="utf-8" />
@@ -6,5 +7,31 @@
 </head>
 
 <body>
+    <form method="post">
+        <label for="name">name(2-30 symbols):</label>
+        <input type="text" id="name" name="student_name" value="[% student.name %]"> <br/>
+
+        <label for="surname">surname(2-50 symbols):</label>
+        <input type="text" id="surname" name="student_surname" value="[% student.surname %]"> <br/>
+
+        <label for="sex">sex:</label>
+        <input type="text" id="sex" name="student_sex" value="[% student.sex %]"> <br/>
+
+
+        <label for="birthday">birthday(yyyy-mm-dd):</label>
+        <input type="text" id="birthday" name="student_birthday" value="[% student.birthday %]"> <br/>
+
+
+        <label for="nationality">nationality(2-20 symbols):</label>
+        <input type="text" id="nationality" name="student_nationality" value="[% student.nationality %]"> <br/>
+
+        <label for="address">address(1-50 symbols):</label>
+        <input type="text" id="address" name="student_address" value="[% student.address %]"> <br/>
+
+        <label for="nomer">nomer:</label>
+        <input type="text" id="nomer" name="student_nomer" value="[% student.nomer %]"> <br/>
+
+        <input type="submit" value="Submit" />
+    </form>
 </body>
 </html>

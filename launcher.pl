@@ -12,6 +12,8 @@ use BootcampSettings;
 use BootcampDbConn;
 use frontpage::Frontpage;
 use edit::Edit;
+use delete::Delete;
+use add::Add;
 
 use strict;
 use warnings FATAL => 'all';
@@ -24,10 +26,18 @@ sub find_request_handler {
     if ($r->method eq 'GET' and $r_path eq "/") {
         $request_handler = \&students_list;
     } else {
-        if ($r_path =~ /^\/edit/) {
-            $request_handler = \&edit_student;
+        if ($r_path =~ /^\/add\//){
+            $request_handler = \&add_student;
         } else {
-            $request_handler = \&permission_denied_handler;
+            if ($r_path =~ /^\/edit\//) {
+                $request_handler = \&edit_student;
+            } else {
+                if ($r_path =~ /^\/delete\//) {
+                    $request_handler = \&delete_student;
+                } else {
+                    $request_handler = \&permission_denied_handler;
+                }
+            }
         }
     }
     return $request_handler;
@@ -40,8 +50,8 @@ sub permission_denied_handler {
 
 my $d = HTTP::Daemon->new(LocalPort => HTTP_PORT, ReuseAddr => 1) || die;
 print "Please contact me at: <URL:", $d->url, ">\n";
-while (my $c = $d->accept) {
-    if (my $r = $c->get_request) {
+while (my $c = $d->accept() ) {
+    if (my $r = $c->get_request() ) {
         my $handler = find_request_handler($c, $r);
         $handler->($c, $r);
 

@@ -40,7 +40,7 @@ sub students_list {
     my $template = Template->new($tt_config, $vars);
 
     my $processed_template;
-    $template->process("frontpage.tt", $vars, \$processed_template) || die $template->error(), "\n";;
+    $template->process("frontpage.tt", $vars, \$processed_template) || die $template->error(), "\n";
 
     $c->send_basic_header(200);
     print $c "Content-Type: text/html";
