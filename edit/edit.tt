@@ -8,6 +8,7 @@
 
 <body>
     <form method="post">
+        <input type="hidden" id="id" name="student_id" value="[% student.id %]">
         <label for="name">name(2-30 symbols):</label>
         <input type="text" id="name" name="student_name" value="[% student.name %]"> <br/>
 
