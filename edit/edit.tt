@@ -9,30 +9,36 @@
 <body>
     <form method="post">
         <input type="hidden" id="id" name="student_id" value="[% student.id %]">
-        <label for="name">name(2-30 symbols):</label>
+        <label for="name">Name(2-30 symbols):</label>
         <input type="text" id="name" name="student_name" value="[% student.name %]"> <br/>
 
-        <label for="surname">surname(2-50 symbols):</label>
+        <label for="surname">Surname(2-50 symbols):</label>
         <input type="text" id="surname" name="student_surname" value="[% student.surname %]"> <br/>
 
-        <label for="sex">sex:</label>
-        <input type="text" id="sex" name="student_sex" value="[% student.sex %]"> <br/>
+        Sex:
+        <input name="student_sex" type="radio" value="M" [% IF student.sex == 'M' %]checked[% END  %]>Male
+        <input name="student_sex" type="radio" value="F" [% IF student.sex == 'F' %]checked[% END  %]>Female
+        <br/>
 
-
-        <label for="birthday">birthday(yyyy-mm-dd):</label>
+        <label for="birthday">Birthday(yyyy-mm-dd):</label>
         <input type="text" id="birthday" name="student_birthday" value="[% student.birthday %]"> <br/>
 
 
-        <label for="nationality">nationality(2-20 symbols):</label>
+        <label for="nationality">Nationality(2-20 symbols):</label>
         <input type="text" id="nationality" name="student_nationality" value="[% student.nationality %]"> <br/>
 
-        <label for="address">address(1-50 symbols):</label>
+        <label for="address">Address(1-50 symbols):</label>
         <input type="text" id="address" name="student_address" value="[% student.address %]"> <br/>
 
-        <label for="nomer">nomer:</label>
-        <input type="text" id="nomer" name="student_nomer" value="[% student.nomer %]"> <br/>
+        <label for="nomer">Group:</label>
 
-        <input type="submit" value="Submit" />
+        <select id="nomer" name="student_group_id">
+            [% FOREACH group IN avail_groups %]
+                <option value="[% group.id %]" [% IF group.id == student.group_id %]selected[% END  %]>[% group.nomer %]</option>
+            [% END %]
+        </select><br/>
+
+        <input type="submit" value="Edit" />
     </form>
 </body>
 </html>

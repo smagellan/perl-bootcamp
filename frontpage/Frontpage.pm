@@ -20,10 +20,7 @@ sub students_list {
     my $sth = $dbh->prepare("select st.id, st.name, st.surname, st.birthday, gr.nomer, st.mark
                                     from student st inner join group_st gr on (st.group_id = gr.id)" );
 
-    my $rv = $sth->execute() or die $DBI::errstr;
-    if($rv < 0){
-        print $DBI::errstr;
-    }
+    $sth->execute() or die $DBI::errstr;
 
     my $students_hash = $sth->fetchall_hashref("id");
     my @keys = sort { $a cmp $b } keys %$students_hash;
