@@ -42,14 +42,14 @@ sub fetch_avail_groups() {
     return @vals;
 }
 
-sub render_get {
+sub render_edit_page {
     my ($student_id) = @_;
     my $dbh = db_conn();
     my $sth = $dbh->prepare("select st.id, st.name, st.surname, st.sex, st.nationality, st.address, st.birthday, st.mark, gr.id as group_id, gr.nomer as group_nomer
                                     from student st inner join group_st gr on (st.group_id = gr.id)
-                             where st.id=$student_id" );
+                             where st.id = ?" );
 
-    $sth->execute() or die $DBI::errstr;
+    $sth->execute($student_id) or die $DBI::errstr;
 
     my $student_fields = $sth->fetchrow_hashref();
     if ($student_fields) {
@@ -74,9 +74,9 @@ sub edit_student {
     my ($c, $r) = @_;
     my $r_path = $r->uri->path;
     my $student_id = extract_id_from_request_string($r_path);
-    print("student id: $student_id\n");
+
     if ($r->method eq 'GET') {
-        my ($http_code, $answer) = render_get($student_id);
+        my ($http_code, $answer) = render_edit_page($student_id);
 
         $c->send_basic_header($http_code);
         print $c "Content-Type: text/html";

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Delete student</title>
+</head>
+<body>
+    Really delete '[% "$student.name $student.surname" %]' ?
+    <form method="post">
+        <input type="submit" value="yes" name="answer"/>
+        <input type="submit" value="no" name="answer"/>
+    </form>
+</body>
+</html>
