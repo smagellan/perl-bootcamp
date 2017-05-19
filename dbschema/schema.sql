@@ -43,7 +43,7 @@ CREATE TABLE student (
     birthday TEXT NOT NULL,
     nationality TEXT NOT NULL,
     address TEXT NOT NULL,
-    mark REAL NOT NULL,
+    mark REAL NOT NULL CHECK ( mark >= 2 and mark <= 5 ),
     group_id INTEGER NOT NULL,
     FOREIGN KEY (group_id) REFERENCES group_st (id) ON DELETE CASCADE
 );

@@ -27,7 +27,7 @@ sub find_request_handler {
     if ($r->method eq 'GET' and $r_path eq "/") {
         $request_handler = \&students_list;
     } else {
-        if ($r_path =~ /^\/add\//){
+        if ($r_path =~ /^\/add\// || $r_path =~ /^\/add$/){
             $request_handler = \&add_student;
         } else {
             if ($r_path =~ /^\/edit\//) {
