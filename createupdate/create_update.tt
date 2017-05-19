@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>[% IF page_mode == 'edit' %]Edit[% ELSE %]Create[% END %] student</title>
+</head>
+
+<body>
+<form method="post">
+    <input type="hidden" id="id" name="student_id" value="[% student.id %]">
+    <label for="name">Name(2-30 symbols):</label>
+    <input type="text" id="name" name="student_name" value="[% student.name %]"> <br/>
+
+    <label for="surname">Surname(2-50 symbols):</label>
+    <input type="text" id="surname" name="student_surname" value="[% student.surname %]"> <br/>
+
+    Sex:
+    <input name="student_sex" type="radio" value="M" [% IF student.sex == 'M' %]checked[% END  %]>Male
+    <input name="student_sex" type="radio" value="F" [% IF student.sex == 'F' %]checked[% END  %]>Female
+    <br/>
+
+    <label for="birthday">Birthday(yyyy-mm-dd):</label>
+    <input type="text" id="birthday" name="student_birthday" value="[% student.birthday %]"> <br/>
+
+
+    <label for="nationality">Nationality(2-20 symbols):</label>
+    <input type="text" id="nationality" name="student_nationality" value="[% student.nationality %]"> <br/>
+
+    <label for="address">Address(1-50 symbols):</label>
+    <input type="text" id="address" name="student_address" value="[% student.address %]"> <br/>
+
+    <label for="nomer">Group:</label>
+
+    <select id="nomer" name="student_group_id">
+        [% FOREACH group IN avail_groups %]
+            <option value="[% group.id %]" [% IF group.id == student.group_id %]selected[% END  %]>[% group.nomer %]</option>
+        [% END %]
+    </select><br/>
+
+    [% IF page_mode == 'create' %]
+        <label for="mark">Mark(2.00 - 5.00):</label>
+        <input type="text" id="mark" name="student_mark" value="[% student.mark %]"> <br/>
+    [% END %]
+    <input type="submit" value="Edit" />
+</form>
+</body>
+</html>

@@ -38,6 +38,10 @@
             [% END %]
         </select><br/>
 
+        [% IF show_student_mark %]
+            <label for="mark">Mark(2.00 - 5.00):</label>
+            <input type="text" id="mark" name="student_mark" value="[% student.mark %]"> <br/>
+        [% END %]
         <input type="submit" value="Edit" />
     </form>
 </body>
