@@ -3,6 +3,7 @@ use strict;
 use warnings FATAL => 'all';
 use base 'Exporter';
 use BootcampDbConn;
+use tasks::TaskQueryProvider;
 use DDP;
 
 our @EXPORT = qw(
@@ -10,9 +11,10 @@ our @EXPORT = qw(
     );
 
 
-sub show_tasks_solutions{
+sub show_tasks_solutions {
     my ($c, $r) = @_;
-    my $task_result = task14();
+    #my $task_result = task14();
+    my $task_result = fetch_task_data(14);
 
 
 
@@ -36,6 +38,23 @@ sub show_tasks_solutions{
     $c->send_crlf();
     $c->send_crlf();
     print $c $processed_template;
+}
+
+sub fetch_task_data {
+    my ($task_no) = @_;
+    my $tasks = get_task_descriptors();
+
+    my $task = $tasks->[$task_no];
+    if ($task) {
+        my $dbh = db_conn();
+        print("task no: $task_no, query: ".$task->{'query'});
+        my @result = $dbh->selectall_array($task->{'query'});
+        my $ret = {
+            column_names => $task->{'query_columns'},
+            columns      => \@result
+        };
+        return $ret;
+    }
 }
 
 sub task1 {
@@ -188,7 +207,7 @@ sub task13 {
     my $dbh = db_conn();
     my @result = $dbh->selectall_array("select count(1) as student_count
                                         from student st
-                                        where cast( ((julianday(date('now')) - julianday(st.birthday)) / 365) as int) > 32 and mark = 3");
+                                        where cast( ((julianday(date('now')) - julianday(st.birthday)) / 365) as int) > 22 and mark = 3");
     my $ret = {
         column_names => ["student count (with mark = 3)"],
         columns      => \@result
