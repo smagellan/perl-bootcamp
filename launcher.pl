@@ -15,6 +15,7 @@ use frontpage::Frontpage;
 use edit::Edit;
 use delete::Delete;
 use add::Add;
+use tasks::Tasks;
 
 use strict;
 use warnings FATAL => 'all';
@@ -27,16 +28,20 @@ sub find_request_handler {
     if ($r->method eq 'GET' and $r_path eq "/") {
         $request_handler = \&students_list;
     } else {
-        if ($r_path =~ /^\/add\// || $r_path =~ /^\/add$/){
+        if ($r_path =~ /^\/add(\/|$)/) {
             $request_handler = \&add_student;
         } else {
-            if ($r_path =~ /^\/edit\//) {
+            if ($r_path =~ /^\/edit(\/|$)/) {
                 $request_handler = \&edit_student;
             } else {
-                if ($r_path =~ /^\/delete\//) {
+                if ($r_path =~ /^\/delete(\/|$)/) {
                     $request_handler = \&delete_student;
                 } else {
-                    $request_handler = \&permission_denied_handler;
+                    if ($r_path =~ /^\/tasks(\/|$)/) {
+                        $request_handler = \&show_tasks_solutions;
+                    } else {
+                        $request_handler = \&permission_denied_handler;
+                    }
                 }
             }
         }

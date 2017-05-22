@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Task</title>
+    [% INCLUDE styles %]
+</head>
+
+<body>
+    [% IF task_result && task_result.size %]
+        <table>
+            <thead>
+                <tr>
+                    [% FOREACH col_name IN task_result_column_names %]
+                        <th>[% col_name %]</th>
+                    [% END %]
+                </tr>
+            </thead>
+            <tbody>
+                [% FOREACH row IN task_result %]
+                <tr>
+                    [% FOREACH column IN row %]
+                    <td>[% column %]</td>
+                    [% END %]
+                </tr>
+                [% END %]
+            </tbody>
+        </table>
+    [% ELSE %]
+        No results for this task
+    [% END %]
+</body>
+</html>
