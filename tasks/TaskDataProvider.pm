@@ -16,7 +16,7 @@ sub fetch_task_data {
     my $ret = undef;
     if ($task) {
         my $dbh = db_conn();
-        print("task no: $task_no, query: ".$task->{'query'});
+        print("task no: $task_no, query: ".$task->{'query'}."\n");
         my @result = $dbh->selectall_array($task->{'query'});
         $ret = {
             column_names => $task->{'query_columns'},
