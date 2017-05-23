@@ -32,45 +32,6 @@ sub update_student_data {
         $student_id) or die $DBI::errstr;
 }
 
-#sub fetch_avail_groups() {
-#    my $dbh = db_conn();
-#    my $sth = $dbh->prepare("select id, nomer from group_st" );
-#    $sth->execute() or die $DBI::errstr;
-#
-#    my $groups_hash = $sth->fetchall_hashref("id");
-#    my @keys = sort { $a cmp $b } keys %$groups_hash;
-#    my @vals = @$groups_hash{@keys};
-#    return @vals;
-#}
-#
-#sub render_edit_page1 {
-#    my ($student_id) = @_;
-#    my $dbh = db_conn();
-#    my $sth = $dbh->prepare("select st.id, st.name, st.surname, st.sex, st.nationality, st.address, st.birthday, st.mark, gr.id as group_id, gr.nomer as group_nomer
-#                                    from student st inner join group_st gr on (st.group_id = gr.id)
-#                             where st.id = ?" );
-#
-#    $sth->execute($student_id) or die $DBI::errstr;
-#
-#    my $student_fields = $sth->fetchrow_hashref();
-#    if ($student_fields) {
-#        my $my_path = lib::abs::path(".");
-#        my $tt_config = {
-#            INCLUDE_PATH => $my_path
-#        };
-#        my @avail_groups = fetch_avail_groups();
-#        my $vars = {
-#            student => $student_fields,
-#            avail_groups => \@avail_groups
-#        };
-#        my $template = Template->new($tt_config, $vars);
-#        my $processed_template = "";
-#        $template->process("edit.tt", $vars, \$processed_template) || die $template->error(), "\n";
-#        return (200, $processed_template);
-#    }
-#    return (404, "");
-#}
-
 sub render_edit_page {
     my ($student_id) = @_;
     return render_create_or_edit_page($student_id, 'edit');

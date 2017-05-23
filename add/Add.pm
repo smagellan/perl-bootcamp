@@ -25,7 +25,7 @@ sub create_student_data {
 }
 
 sub render_create_page {
-    my ($student_id) = @_;
+    my $student_id = shift;
     return render_create_or_edit_page($student_id, 'create');
 }
 

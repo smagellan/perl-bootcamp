@@ -45,7 +45,7 @@ sub fetch_avail_groups() {
     my $groups_hash = $sth->fetchall_hashref("id");
     my @keys = sort { $a cmp $b } keys %$groups_hash;
     my @vals = @$groups_hash{@keys};
-    return @vals;
+    return \@vals;
 }
 
 
@@ -59,10 +59,10 @@ sub render_create_or_edit_page{
     my $tt_config = {
         INCLUDE_PATH => $my_path
     };
-    my @avail_groups = fetch_avail_groups();
+    my $avail_groups = fetch_avail_groups();
     my $vars = {
         student => $student_fields,
-        avail_groups => \@avail_groups,
+        avail_groups => $avail_groups,
         page_mode => $page_mode
     };
     my $template = Template->new($tt_config, $vars);

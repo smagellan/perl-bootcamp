@@ -27,24 +27,16 @@ sub find_request_handler {
     my $r_path = $r->uri->path;
     if ($r->method eq 'GET' and $r_path eq "/") {
         $request_handler = \&students_list;
+    } elsif ($r_path =~ /^\/add(\/|$)/) {
+        $request_handler = \&add_student;
+    } elsif ($r_path =~ /^\/edit(\/|$)/) {
+        $request_handler = \&edit_student;
+    } elsif ($r_path =~ /^\/delete(\/|$)/) {
+        $request_handler = \&delete_student;
+    } elsif($r_path =~ /^\/tasks(\/|$)/) {
+        $request_handler = \&show_tasks_solutions;
     } else {
-        if ($r_path =~ /^\/add(\/|$)/) {
-            $request_handler = \&add_student;
-        } else {
-            if ($r_path =~ /^\/edit(\/|$)/) {
-                $request_handler = \&edit_student;
-            } else {
-                if ($r_path =~ /^\/delete(\/|$)/) {
-                    $request_handler = \&delete_student;
-                } else {
-                    if ($r_path =~ /^\/tasks(\/|$)/) {
-                        $request_handler = \&show_tasks_solutions;
-                    } else {
-                        $request_handler = \&permission_denied_handler;
-                    }
-                }
-            }
-        }
+        $request_handler = \&permission_denied_handler;
     }
     return $request_handler;
 }
