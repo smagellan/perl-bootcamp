@@ -3,7 +3,7 @@ use strict;
 use warnings FATAL => 'all';
 use base 'Exporter';
 use BootcampDbConn;
-use tasks::TaskQueryProvider;
+use tasks::TaskDataProvider;
 use BootcampCommons qw(extract_id_from_request_string);
 use DDP;
 
@@ -18,22 +18,10 @@ sub show_tasks_solutions {
     my $task_id = extract_id_from_request_string($r_path);
 
     my $processed_template="";
-    if (defined($task_id)) {
-        my $task_result = fetch_task_data($task_id);
+    my $task_result = defined($task_id) ? fetch_task_data($task_id) : undef;
+    my $tt_vars = $task_result ? render_vars_ok($task_result) : render_vars_error("task not found");
+    $processed_template = render_template($tt_vars);
 
-        my $my_path = lib::abs::path(".");
-        my $tt_config = {
-            INCLUDE_PATH => $my_path
-        };
-        my $vars = {
-            task_result              => $task_result->{'columns'},
-            task_result_column_names => $task_result->{'column_names'}
-        };
-        my $template = Template->new($tt_config, $vars);
-
-
-        $template->process("task.tt", $vars, \$processed_template) || die $template->error(), "\n";
-    }
     $c->send_basic_header(200);
     print $c "Content-Type: text/html";
     $c->send_crlf();
@@ -41,21 +29,35 @@ sub show_tasks_solutions {
     print $c $processed_template;
 }
 
-sub fetch_task_data {
-    my ($task_no) = @_;
-    my $tasks = get_task_descriptors();
+sub render_vars_error {
+    my ($error_message) = @_;
+    return {
+        task_result              => undef,
+        task_result_column_names => undef,
+        error_message            => $error_message
+    };
+}
 
-    my $task = $tasks->[$task_no];
-    if ($task) {
-        my $dbh = db_conn();
-        print("task no: $task_no, query: ".$task->{'query'});
-        my @result = $dbh->selectall_array($task->{'query'});
-        my $ret = {
-            column_names => $task->{'query_columns'},
-            columns      => \@result
-        };
-        return $ret;
-    }
+sub render_vars_ok {
+    my ($task_result) = @_;
+    return {
+        task_result              => $task_result->{'columns'},
+        task_result_column_names => $task_result->{'column_names'},
+        error_message            => undef
+    };
+}
+
+sub render_template() {
+    my ($tt_vars) = @_;
+
+    my $processed_template;
+    my $my_path = lib::abs::path(".");
+    my $tt_config = {
+        INCLUDE_PATH => $my_path
+    };
+    my $template = Template->new($tt_config);
+    $template->process("task.tt", $tt_vars, \$processed_template) || die $template->error(), "\n";
+    return $processed_template;
 }
 
 1;

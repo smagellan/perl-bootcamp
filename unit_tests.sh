@@ -3,7 +3,7 @@
 OURS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 echo "using extra dir $OURS_DIR for perl search path";
 
-perl -I ${OURS_DIR} unit_tests/tasks/TaskQueryProvider_sanity_checker.t
+find unit_tests/ -type f -name '*.t' | xargs -n1 perl -I ${OURS_DIR} 
 
 #TODO: add compile_all_PARALLEL.t/ -cw "-MO=Lint,no-context" check
 

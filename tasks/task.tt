@@ -28,7 +28,7 @@
             </tbody>
         </table>
     [% ELSE %]
-        No results for this task
+        No results for this task. [% IF error_message %][% "Reason: $error_message" %][% END %]
     [% END %]
 </body>
 </html>

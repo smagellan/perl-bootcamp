@@ -4,7 +4,8 @@ use warnings FATAL => 'all';
 
 use base 'Exporter';
 our @EXPORT = qw(
-        get_task_descriptors
+        get_task_descriptor
+        get_task_descriptors_ids
         get_task_descriptors_count
     );
 
@@ -141,12 +142,17 @@ our @TASK_LIST = (
     }
 );
 
-sub get_task_descriptors{
-    return \@TASK_LIST;
+sub get_task_descriptor {
+    my ($task_id) = @_;
+    return $TASK_LIST[$task_id - 1];
 }
 
 sub get_task_descriptors_count{
     return scalar @TASK_LIST;
+}
+
+sub get_task_descriptors_ids {
+    return 1..scalar @TASK_LIST;
 }
 
 1;
