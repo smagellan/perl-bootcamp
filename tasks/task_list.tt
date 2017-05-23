@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Task</title>
+    [% INCLUDE styles %]
+</head>
+
+<body>
+    <table>
+        <thead>
+        <tr>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            [% FOREACH row IN task_descriptors %]
+            <tr>
+                <td><a href="/tasks/[% row.task_id %]">[% row.description %]</a></td>
+            </tr>
+            [% END %]
+        </tbody>
+    </table>
+</body>
+</html>

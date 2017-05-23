@@ -2,15 +2,17 @@ package tasks::TaskQueryProvider;
 use strict;
 use warnings FATAL => 'all';
 
+use DDP;
 use base 'Exporter';
 our @EXPORT = qw(
         get_task_descriptor
+        get_task_descriptors
         get_task_descriptors_ids
         get_task_descriptors_count
     );
 
 
-our @TASK_LIST = (
+our @_TASK_LIST = (
     {
         description => "1. Выбрать имя, фамилию, оценку для каждого студента.",
         query => "select name, surname, mark
@@ -142,17 +144,27 @@ our @TASK_LIST = (
     }
 );
 
+sub get_task_descriptors {
+    return \@_TASK_LIST;
+}
+
 sub get_task_descriptor {
     my ($task_id) = @_;
-    return $TASK_LIST[$task_id - 1];
+    return $_TASK_LIST[$task_id - 1];
 }
 
 sub get_task_descriptors_count{
-    return scalar @TASK_LIST;
+    return scalar @_TASK_LIST;
 }
 
 sub get_task_descriptors_ids {
-    return 1..scalar @TASK_LIST;
+    return 1..scalar @_TASK_LIST;
+}
+
+INIT {
+    foreach my $index (0..$#_TASK_LIST) {
+        $_TASK_LIST[$index]->{task_id} = $index + 1;
+    }
 }
 
 1;
