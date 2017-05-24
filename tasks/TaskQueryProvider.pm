@@ -12,6 +12,30 @@ our @EXPORT = qw(
     );
 
 
+=pod
+    $Id: TaskQueryProvider.pm
+
+=head1 NAME
+
+    Модуль-конфиг страницы /tasks/
+
+=head1 DESCRIPTION
+
+    Хранит параметры заданий. Аттрибуты задания:
+    - description - human-readable описание
+    - query - запрос - решение задачи
+    - query_columns - human-readbale названия столбцов в результирующем query
+    Для реальных обращений к БД следует использовать TaskDataProvider::fetch_task_data
+
+=head1 SYNOPSIS
+
+    use tasks::TaskQueryProvider;
+
+    my @task_descriptor_ids = get_task_descriptors_ids();
+    foreach my $task_id (@task_descriptor_ids) {
+        my $task_descriptor = get_task_descriptor($task_id);
+    }
+=cut
 our @_TASK_LIST = (
     {
         description => "1. Выбрать имя, фамилию, оценку для каждого студента.",

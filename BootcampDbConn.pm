@@ -36,7 +36,7 @@ my $_DB_CONN = undef;
 
 =head2 db_conn()
 
-    Возвращает соеинение c БД
+    Возвращает соединение к БД
 
 =cut
 sub db_conn() {
