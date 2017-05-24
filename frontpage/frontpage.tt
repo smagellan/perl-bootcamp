@@ -10,7 +10,7 @@
 <body>
     [% IF students_list && students_list.size %]
         students list:<br>
-        <table>
+        <table id="students_list_table">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -23,7 +23,7 @@
             </thead>
             <tbody>
                 [% FOREACH row IN students_list %]
-                    <tr>
+                    <tr data-student-id="[% row.id %]">
                         <td>[% row.name %]</td>
                         <td>[% row.surname %]</td>
                         <td>[% row.birthday %]</td>
